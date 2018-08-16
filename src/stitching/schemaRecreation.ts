@@ -193,18 +193,19 @@ export function createResolveType(
 }
 
 export function fieldToFieldConfig(
-  field: GraphQLField<any, any>,
+  field: GraphQLField<any, any> & { iamKey?: string },
   resolveType: ResolveType<any>,
   keepResolvers: boolean,
-): GraphQLFieldConfig<any, any> {
+): GraphQLFieldConfig<any, any> & { iamKey?: string } {
   return {
-    type: resolveType(field.type),
     args: argsToFieldConfigArgumentMap(field.args, resolveType),
+    astNode: field.astNode,
+    deprecationReason: field.deprecationReason,
+    description: field.description,
+    iamKey: field.iamKey,
     resolve: keepResolvers ? field.resolve : defaultMergedResolver,
     subscribe: keepResolvers ? field.subscribe : null,
-    description: field.description,
-    deprecationReason: field.deprecationReason,
-    astNode: field.astNode,
+    type: resolveType(field.type),
   };
 }
 
